@@ -1,54 +1,128 @@
-:root {
-    --primary-blue: #004b93;
-    --primary-yellow: #ffd800;
-    --accent-orange: #FF7F50;
-    --accent-purple: #8A2BE2;
-    --accent-green: #32CD32;
+<?php
+session_start();
+require_once 'config.php';
+
+// Hibák megjelenítése
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
+    echo "Form elküldve<br>"; // Debug üzenet
+    
+    $username = $_POST['registerUsername'];
+    $email = $_POST['registerEmail'];
+    $password = $_POST['registerPassword'];
+    $password_confirm = $_POST['registerPasswordConfirm'];
+    
+    // Debug: Kiíratjuk a kapott értékeket
+    echo "Kapott adatok:<br>";
+    echo "Username: " . $username . "<br>";
+    echo "Email: " . $email . "<br>";
+    
+    $errors = [];
+
+    // Validációk
+    if (empty($username) || empty($email) || empty($password) || empty($password_confirm)) {
+        $errors[] = "Minden mező kitöltése kötelező";
+    }
+
+    if ($password !== $password_confirm) {
+        $errors[] = "A jelszavak nem egyeznek";
+    }
+
+    if (empty($errors)) {
+        try {
+            // Először próbáljuk meg közvetlenül beszúrni az adatokat
+            $sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+            echo "SQL lekérdezés: " . $sql . "<br>"; // Debug üzenet
+            
+            $stmt = $conn->prepare($sql);
+            
+            // Az értékek bekötése és kiíratása
+            $params = [
+                ':username' => $username,
+                ':email' => $email,
+                ':password' => $password
+            ];
+            
+            echo "Paraméterek:<br>";
+            print_r($params);
+            echo "<br>";
+            
+            $result = $stmt->execute($params);
+            
+            if ($result) {
+                echo "Sikeres beszúrás! Utolsó beszúrt ID: " . $conn->lastInsertId() . "<br>";
+                $_SESSION['success'] = "Sikeres regisztráció!";
+                header("Location: login.php");
+                exit();
+            } else {
+                echo "Hiba a beszúrás során. SQL hiba info:<br>";
+                print_r($stmt->errorInfo());
+                $errors[] = "Hiba történt a regisztráció során";
+            }
+            
+        } catch (PDOException $e) {
+            echo "PDO Hiba történt: " . $e->getMessage() . "<br>";
+            echo "Hibakód: " . $e->getCode() . "<br>";
+            $errors[] = "Adatbázis hiba történt: " . $e->getMessage();
+        }
+    }
+
+    if (!empty($errors)) {
+        echo "Hibák:<br>";
+        foreach ($errors as $error) {
+            echo $error . "<br>";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Regisztráció</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+    --volan-blue: #004b93;
+    --volan-yellow: #ffd800;
 }
 
 body {
-    background: linear-gradient(135deg, #000000, #8B0000, #4B0082);
-    background-size: 300% 300%;
-    animation: gradientShift 10s infinite ease-in-out;
+    background: linear-gradient(135deg, black 0%, darkred 100%);
     min-height: 100vh;
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    font-family: Arial, sans-serif;
 }
 
 .register-container {
-    width: 90%;
-    max-width: 1200px;
-    min-width: 300px;
-    padding: 3rem;
-    background: linear-gradient(135deg, #FFFFFF, #F0F0F0);
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    animation: fadeIn 1.5s ease-out;
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    width: 90%; /* Az alapértelmezett szélesség százalékosan */
+    max-width: 1200px; /* Maximális szélesség nagyobb képernyőkön */
+    min-width: 300px; /* Minimális szélesség kisebb nézetekhez */
+    padding: 2.5rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .icon-container {
     text-align: center;
-    margin-bottom: 2.5rem;
-    animation: bounceIn 1.5s ease-out;
+    margin-bottom: 2rem;
+    animation: fadeIn 1s ease-in;
+    position: relative;
 }
 
 .icon-container i {
-    font-size: 4rem;
-    background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple), var(--primary-yellow));
+    font-size: 3.5rem;
+    color: var(--volan-blue);
+    background: linear-gradient(45deg, var(--volan-blue), #0066cc);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -57,7 +131,7 @@ body {
 form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 form div {
@@ -67,168 +141,141 @@ form div {
 }
 
 label {
-    color: var(--primary-blue);
-    font-weight: 700;
+    color: var(--volan-blue);
+    font-weight: 600;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    padding: 1rem;
-    border: 2px solid #ddd;
-    border-radius: 12px;
+#registerUsername,
+#registerEmail,
+#registerPassword,
+#registerPasswordConfirm {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     transition: all 0.3s;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border-color: var(--accent-orange);
-    box-shadow: 0 0 0 0.3rem rgba(255, 127, 80, 0.2);
+#registerUsername:focus,
+#registerEmail:focus,
+#registerPassword:focus,
+#registerPasswordConfirm:focus {
+    border-color: var(--volan-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 75, 147, 0.15);
     outline: none;
 }
 
 button[name="register"] {
-    background: linear-gradient(135deg, var(--accent-green), var(--primary-yellow));
+    background: linear-gradient(45deg, orange, #FF4500);
     color: white;
-    padding: 1rem;
+    padding: 0.8rem;
     border: none;
-    border-radius: 50px;
-    font-weight: bold;
+    border-radius: 8px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s;
-    margin-top: 1.5rem;
-    box-shadow: 0 10px 25px rgba(50, 205, 50, 0.4);
+    margin-top: 1rem;
 }
 
 button[name="register"]:hover {
-    background: linear-gradient(135deg, var(--primary-yellow), var(--accent-green));
-    transform: scale(1.05);
-    box-shadow: 0 15px 35px rgba(50, 205, 50, 0.6);
+    background: linear-gradient(45deg, #FF4500, orange);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 75, 147, 0.2);
 }
 
 .login-link {
-    color: var(--accent-purple);
+    color: var(--volan-blue);
     text-decoration: none;
-    font-weight: 600;
     transition: all 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    justify-content: center;
 }
 
 .login-link:hover {
-    color: var(--primary-yellow);
-    transform: translateX(5px);
+    color: #0066cc;
 }
 
-@keyframes bounceIn {
-    0% {
-        transform: scale(0.5);
+@keyframes fadeIn {
+    from {
         opacity: 0;
+        transform: translateY(-20px);
     }
-    80% {
-        transform: scale(1.2);
+    to {
         opacity: 1;
-    }
-    100% {
-        transform: scale(1);
+        transform: translateY(0);
     }
 }
 
-/* Adding new elements and modernizing design */
-.footer {
-    background: #20232a;
-    padding: 2rem 0;
-    text-align: center;
-    color: #ffffff;
-    border-top: 3px solid var(--primary-blue);
-}
-.footer p {
-    margin: 0;
-}
-.footer a {
-    color: var(--primary-yellow);
-    text-decoration: none;
-}
-.footer a:hover {
-    color: var(--accent-orange);
-}
-
-/* New elements for additional sections */
-.testimonial {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 2rem;
-    border-radius: 15px;
-    margin-top: 2rem;
-}
-.testimonial h3 {
-    color: var(--primary-blue);
-    margin-bottom: 1rem;
-}
-.testimonial p {
-    color: #dddddd;
-}
-.testimonial .author {
-    color: var(--accent-orange);
-    margin-top: 1rem;
-    font-weight: 700;
-}
-
-.newsletter {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
-    border-radius: 15px;
-    margin-top: 2rem;
+.text-center {
     text-align: center;
 }
-.newsletter h3 {
-    color: var(--primary-blue);
-    margin-bottom: 1rem;
-}
-.newsletter p {
-    color: #555555;
-    margin-bottom: 1.5rem;
-}
-.newsletter input[type="email"] {
-    padding: 0.8rem;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    transition: all 0.3s;
-    width: 80%;
-    max-width: 400px;
-    margin-bottom: 1.5rem;
-}
-.newsletter input[type="email"]:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 0.3rem rgba(0, 75, 147, 0.2);
-    outline: none;
-}
-.newsletter button {
-    background: var(--primary-blue);
-    color: white;
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.newsletter button:hover {
-    background: var(--accent-orange);
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(255, 127, 80, 0.6);
+
+.mt-4 {
+    margin-top: 1.5rem;
 }
 
-@media (max-width: 768px) {
-    .register-container {
-        padding: 2rem;
-    }
-    .icon-container i {
-        font-size: 3rem;
-    }
-    button[name="register"] {
-        padding: 0.7rem;
-    }
+.mb-0 {
+    margin-bottom: 0;
 }
+
+.me-1 {
+    margin-right: 0.25rem;
+}
+
+    </style>
+</head>
+<body>
+    <?php
+    if (isset($errors)) {
+        foreach ($errors as $error) {
+            echo '<div style="color: red;">' . $error . '</div>';
+        }
+    }
+    ?>
+<div class="container d-flex align-items-center justify-content-center min-vh-100 style="text-align:center; color: black; max-width: 20%; border: 2px solid white; background-color: darkgray; opacity: 0.5; border-radius:8px;">
+	
+
+ 
+        <div class="register-container">
+            <div class="icon-container">
+<h3>Kaposvári Közlekedési Zrt.</h3>	
+			<h5>Regisztráció</h4>
+
+            <svg xmlns="http://www.w3.org/2000/svg" style="max-width: 40%;" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M488 128h-8V80c0-44.8-99.2-80-224-80S32 35.2 32 80v48h-8c-13.3 0-24 10.7-24 24v80c0 13.3 10.8 24 24 24h8v160c0 17.7 14.3 32 32 32v32c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32v-32h192v32c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32v-32h6.4c16 0 25.6-12.8 25.6-25.6V256h8c13.3 0 24-10.8 24-24v-80c0-13.3-10.8-24-24-24zM112 400c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm16-112c-17.7 0-32-14.3-32-32V128c0-17.7 14.3-32 32-32h256c17.7 0 32 14.3 32 32v128c0 17.7-14.3 32-32 32H128zm272 112c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/></svg>            </div>
+    <form action="register.php" method="POST">
+        <div>
+            <label for="registerUsername">Felhasználónév:</label>
+            <input type="text" id="registerUsername" name="registerUsername" required>
+        </div>
+        
+        <div>
+            <label for="registerEmail">Email:</label>
+            <input type="email" id="registerEmail" name="registerEmail" required>
+        </div>
+        
+        <div>
+            <label for="registerPassword">Jelszó:</label>
+            <input type="password" id="registerPassword" name="registerPassword" required>
+        </div>
+        
+        <div>
+            <label for="registerPasswordConfirm">Jelszó megerősítése:</label>
+            <input type="password" id="registerPasswordConfirm" name="registerPasswordConfirm" required>
+        </div>
+        
+        <button type="submit" name="register">Regisztráció</button>
+    </form>
+<div class="text-center mt-4">
+                <p class="mb-0">Már van fiókod? 
+                    <a href="login.php" class="login-link">
+                        <i class="fas fa-sign-in-alt me-1"></i>Bejelentkezés
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
