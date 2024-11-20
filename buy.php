@@ -26,10 +26,10 @@ try {
     <link rel="stylesheet" href="styles.css">
     <style>
         :root {
-            --primary-color: linear-gradient(to right, #211717,#b30000);
+            --primary-color: #001F3F;
             --accent-color: #FFC107;
             --text-light: #FFFFFF;
-            --shadow: 0 5px 10px rgba(0,0,0,0.8);
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         body {
@@ -43,214 +43,116 @@ try {
 
 /*-----------------------------------------------------------------------------------------------------CSS - HEADER------------------------------------------------------------------------------------------------------*/
 
-.header {
-    position: relative;
-    background: var(--primary-color);
-    color: var(--text-light);
-    padding: 1rem;
-    box-shadow: 0 2px 10px var(--shadow-color);
-}
+        .header {
+            position: relative;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.header h1 {
-    margin: 0;
-    text-align: center;
-    font-size: 2rem;
-    padding: 1rem 0;
-}
+        .navh1{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.nav-wrapper {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1000;
-}
+        nav {
+            position: relative;
+            background-color: var(--primary-color);
+            padding: 8px;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: width 0.6s linear;
+            margin-right: 10px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            max-height: 50px;
+        }
 
-.nav-container {
-    position: relative;
-}
+        nav.active {
+            width: 99%;
+        }
 
-.menu-btn {
-    background: none;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px var(--shadow-color);
-}
+        nav ul {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            width: 0;
+            transition: width 0.6s linear;
+        }
 
-.menu-btn:hover {
-    background: none;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
-}
+        nav.active ul {
+            width: 100%;
+        }
 
-.hamburger {
-    position: relative;
-    width: 30px;
-    height: 20px;
-}
+        nav ul li {
+            transform: rotateY(0deg);
+            opacity: 0;
+            transition: transform 0.6s linear, opacity 0.6s linear;
+            padding: 15px;
+        }
 
-.hamburger span {
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    background: var(--text-light);
-    border-radius: 3px;
-    transition: all 0.3s ease;
-}
+        nav.active ul li {
+            opacity: 1;
+            transform: rotateY(360deg);
+        }
 
-.hamburger span:nth-child(1) { top: 0; }
-.hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
-.hamburger span:nth-child(3) { bottom: 0; }
+        nav ul a {
+            position: relative;
+            color: #000;
+            text-decoration: none;
+            margin: 0 5px;
+        }
 
-.menu-btn.active .hamburger span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
+        .icon {
+            background-color: var(--primary-color);
+            border: 0;
+            cursor: pointer;
+            padding: 0;
+            position: relative;
+            height: 30px;
+            width: 30px;
+        }
 
-.menu-btn.active .hamburger span:nth-child(2) {
-    opacity: 0;
-}
+        .icon:hover{
+            background-color: var(--primary-color);
+        }
 
-.menu-btn.active .hamburger span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
-}
+        .icon:focus {
+            outline: 0;
+        }
 
-.dropdown-menu {
-    position: absolute;
-    top: calc(100% + 1rem);
-    left: 0;
-    background: var(--text-light);
-    border-radius: 12px;
-    min-width: 280px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    overflow: hidden;
-}
+        .icon .line {
+            background-color: var(--text-light);
+            height: 2px;
+            width: 20px;
+            position: absolute;
+            top: 10px;
+            left: 5px;
+            transition: transform 0.6s linear;
+        }
 
-.dropdown-menu.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
+        .icon .line2 {
+            top: auto;
+            bottom: 10px;
+        }
 
-.menu-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+        nav.active .icon .line1 {
+            transform: rotate(-765deg) translateY(5.5px);
+        }
 
-.menu-items li {
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
+        nav.active .icon .line2 {
+            transform: rotate(765deg) translateY(-5.5px);
+        }
 
-.dropdown-menu.active .menu-items li {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.menu-items li:nth-child(1) { transition-delay: 0.1s; }
-.menu-items li:nth-child(2) { transition-delay: 0.2s; }
-.menu-items li:nth-child(3) { transition-delay: 0.3s; }
-.menu-items li:nth-child(4) { transition-delay: 0.4s; }
-.menu-items li:nth-child(5) { transition-delay: 0.5s; }
-
-.menu-items a {
-    display: flex;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    color: black;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-items a:hover {
-    background: linear-gradient(to right, #211717,#b30000);
-    color: white;
-    padding-left: 2rem;
-}
-
-.menu-items a::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: darkred;
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-}
-
-.menu-items a:hover::before {
-    transform: scaleY(1);
-}
-
-.menu-items a img {
-    width: 24px;
-    height: 24px;
-    margin-right: 12px;
-    transition: transform 0.3s ease;
-}
-
-.menu-items a:hover img {
-    transform: scale(1.2) rotate(5deg);
-}
-
-.menu-items a span {
-    font-size: 17px;
-}
-
-
-.menu-items a.active {
-    background: white;
-    color: black;
-    font-weight: 600;
-}
-
-.menu-items a.active::before {
-    transform: scaleY(1);
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
-
-.menu-items a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: gray;
-    left: 0;
-    top: 0;
-    transform: scale(0);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.5s ease;
-}
-
-.menu-items a:active::after {
-    animation: ripple 0.6s ease-out;
-}
 /*-----------------------------------------------------------------------------------------------------HEADER END--------------------------------------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------------------------------------CSS - OTHER PARTS----------------------------------------------------------------------------------------------*/
@@ -456,55 +358,29 @@ try {
 </head>
 <body>
 
-<div class="header">
-    <div class="nav-wrapper">
-        <div class="nav-container">
-            <button class="menu-btn" id="menuBtn">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </button>
-            <nav class="dropdown-menu" id="dropdownMenu">
-                <ul class="menu-items">
-                    <li>
-                        <a href="index.php" class="active">
-                            <img src="placeholder.png" alt="Főoldal">
-                            <span>Főoldal</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="buy.php">
-                            <img src="tickets.png" alt="Jegyvásárlás">
-                            <span>Jegyvásárlás</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="menetrend.php">
-                            <img src="calendar.png" alt="Menetrend">
-                            <span>Menetrend</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="info.php">
-                            <img src="information-button.png" alt="Információ">
-                            <span>Információ</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="logout.php">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Kijelentkezés</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+    <div class="header">
+        <nav class="active" id="nav">
+            <ul>
+              <li><a href="index.php" style="color: #FFFFFF; font-weight: bold;"><img src="placeholder.png" style="height: 30px; width: 30px;"> Főoldal</a></li>
+              <li><a href="buy.html.php" style="color: #FFFFFF; font-weight: bold;"><img src="tickets.png" style="height: 30px; width: 30px;"> Jegyvásárlás</a></li>
+              <li><a href="menetrend.php" style="color: #FFFFFF; font-weight: bold;"><img src="calendar.png" style="height: 30px; width: 30px;"> Menetrend</a></li>
+              <li><a href="info.php" style="color: #FFFFFF; font-weight: bold;"><img src="information-button.png" style="height: 30px; width: 30px;"> Információ</a></li>
+              <li style="padding-left: 50%" class="nav-item">
+              <li style="padding-left: 50%" class="nav-item"><a href="logout.php" class="nav-link"><i style="color:white" class="fas fa-sign-out-alt"></i><span style="color:white; font-weight: bold ">Kijelentkezés</sapn></a></li> 
 
-    
+</li> 
+
+            </ul>
+            <button class="icon" id="toggle">
+              <div class="line line1"></div>
+              <div class="line line2"></div>
+            </button>
+          </nav>
+
+
+        <div class="navh1">
             <h1>Jegy és bérlet vásárlás</h1>
+        </div>
     </div>
 
     <div style="margin-top: 5%;" class="container">
@@ -709,35 +585,7 @@ try {
         </div>
     </footer>
 <!-- -----------------------------------------------------------------------------------------------------FOOTER END--------------------------------------------------------------------------------------------------- -->
-<script>
-    document.getElementById('menuBtn').addEventListener('click', function() {
-    this.classList.toggle('active');
-    document.getElementById('dropdownMenu').classList.toggle('active');
-});
 
-// Kívülre kattintás esetén bezárjuk a menüt
-document.addEventListener('click', function(event) {
-    const menu = document.getElementById('dropdownMenu');
-    const menuBtn = document.getElementById('menuBtn');
-    
-    if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
-        menu.classList.remove('active');
-        menuBtn.classList.remove('active');
-    }
-});
-
-// Aktív oldal jelölése
-document.addEventListener('DOMContentLoaded', function() {
-    const currentPage = window.location.pathname.split('/').pop();
-    const menuItems = document.querySelectorAll('.menu-items a');
-    
-    menuItems.forEach(item => {
-        if (item.getAttribute('href') === currentPage) {
-            item.classList.add('active');
-        }
-    });
-});
-</script>
     <script>
       
 const busStations = [
@@ -794,6 +642,10 @@ document.addEventListener('DOMContentLoaded', initializeDropdowns);
         const today = new Date();
         document.getElementById("validFrom").value = today.toISOString().split("T")[0];
         document.getElementById("validFrom").min = today.toISOString().split("T")[0];
+        const delay = new Date();
+        document.getElementById("datum").value = today.toISOString().split("T")[0];
+        document.getElementById("datum").min = today.toISOString().split("T")[0];
+
 
         document.getElementById("validUntil").min = today.toISOString().split("T")[0];
 
@@ -1291,7 +1143,6 @@ document.getElementById('validFrom').addEventListener('change', updatePrice);
         });
     });
 });
-
     </script>
 </body>
 </html>

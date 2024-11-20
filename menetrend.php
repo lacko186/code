@@ -22,11 +22,15 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         :root {
-            --primary-color: #001F3F;
+            --primary-color:linear-gradient(to right, #211717,#b30000);
             --accent-color: #FFC107;
             --text-light: #FFFFFF;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --secondary-color: #3498db;
+            --hover-color: #2980b9;
+            --background-light: #f8f9fa;
+            --text-light: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -40,158 +44,214 @@ try {
 
 /*--------------------------------------------------------------------------------------------------------HEADER--------------------------------------------------------------------------------------------------------*/
 
-        .header {
-            position: relative;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            align-items: left;
-            gap: 1rem;
-            padding: 16px;
-        }
+.header {
+    position: relative;
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 1rem;
+    box-shadow: 0 2px 10px var(--shadow-color);
+}
 
-        nav {
-            
-            position: relative;
-            background-color: var(--primary-color);
-            padding: 8px;
-            width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            transition: width 0.6s linear;
-            margin-right: 10px;
-            margin-top: 30px;
-            max-height: 50px;
-            
-        }
+.header h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+    padding: 1rem 0;
+}
+
+.nav-wrapper {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+}
+
+.nav-container {
+    position: relative;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.menu-btn:hover {
+    background: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.hamburger {
+    position: relative;
+    width: 30px;
+    height: 20px;
+}
+
+.hamburger span {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: var(--text-light);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.hamburger span:nth-child(3) { bottom: 0; }
+
+.menu-btn.active .hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-btn.active .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-btn.active .hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 1rem);
+    left: 0;
+    background: var(--text-light);
+    border-radius: 12px;
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    overflow: hidden;
+}
+
+.dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.menu-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-items li {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.dropdown-menu.active .menu-items li {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.menu-items li:nth-child(1) { transition-delay: 0.1s; }
+.menu-items li:nth-child(2) { transition-delay: 0.2s; }
+.menu-items li:nth-child(3) { transition-delay: 0.3s; }
+.menu-items li:nth-child(4) { transition-delay: 0.4s; }
+.menu-items li:nth-child(5) { transition-delay: 0.5s; }
+
+.menu-items a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-items a:hover {
+    background: linear-gradient(to right, #211717,#b30000);
+    color: white;
+    padding-left: 2rem;
+}
+
+.menu-items a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: darkred;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.menu-items a:hover::before {
+    transform: scaleY(1);
+}
+
+.menu-items a img {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    transition: transform 0.3s ease;
+}
+
+.menu-items a:hover img {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.menu-items a span {
+    font-size: 17px;
+}
 
 
-        nav.active {
-            width: 99%;
-        }
+.menu-items a.active {
+    background: white;
+    color: black;
+    font-weight: 600;
+}
 
-        nav ul {
-            display: flex;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            width: 0;
-            transition: width 0.6s linear;
-        }
+.menu-items a.active::before {
+    transform: scaleY(1);
+}
 
-        nav.active ul {
-            width: 100%;
-        }
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
 
-        nav ul li {
-            transform: rotateY(0deg);
-            opacity: 0;
-            transition: transform 0.6s linear, opacity 0.6s linear;
-            padding: 5px;
-        }
+.menu-items a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: gray;
+    left: 0;
+    top: 0;
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
 
-        nav.active ul li {
-            opacity: 1;
-            transform: rotateY(360deg);
-        }
-
-        nav ul a {
-            position: relative;
-            color: #000;
-            text-decoration: none;
-            margin: 0 5px;
-        }
-
-        .icon {
-            background-color: var(--primary-color);
-            border: 0;
-            cursor: pointer;
-            padding: 0;
-            position: relative;
-            height: 30px;
-            width: 30px;
-        }
-
-        .icon:hover{
-            background-color: var(--primary-color);
-        }
-
-        .icon:focus {
-            outline: 0;
-        }
-
-        .icon .line {
-            background-color: var(--text-light);
-            height: 2px;
-            width: 20px;
-            position: absolute;
-            top: 10px;
-            left: 5px;
-            transition: transform 0.6s linear;
-        }
-
-        .icon .line2 {
-            top: auto;
-            bottom: 10px;
-        }
-
-        nav.active .icon .line1 {
-            transform: rotate(-765deg) translateY(5.5px);
-        }
-
-        nav.active .icon .line2 {
-            transform: rotate(765deg) translateY(-5.5px);
-        }
-
-        .time {
-            text-align: center;
-            font-size: 1.5rem;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            animation: pulse 2s infinite;
-        }
-
-        .search-container {
-            width: 100%;
-            max-width: 700px;
-            position: relative;
-            align-content: center;
-            margin: 1rem 0;
-        }
-
-        #searchBox {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow);
-            font-size: 1rem;
-            transition: var(--transition);
-            align-content: center;
-        }
-
-        #searchBox:focus {
-            outline: none;
-            transform: scale(1.02);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 1px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
-        }
+.menu-items a:active::after {
+    animation: ripple 0.6s ease-out;
+}
         
 /*--------------------------------------------------------------------------------------------------------HEADER END----------------------------------------------------------------------------------------------------*/
 
@@ -452,41 +512,110 @@ footer {
             color: var(--accent-color);
         }
 /*-----------------------------------------------------------------------------------------------------CSS -FOOTER--------------------------------------------------------------------------------------------------------*/
+/* Konténer stílus */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5; /* Világos szürke háttér */
+    border-radius: 25px; /* Lekerekített sarkok */
+    padding: 10px 20px; /* Belső margó */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Árnyék */
+    max-width: 400px; /* Maximális szélesség */
+    margin: 0 auto; /* Középre igazítás */
+}
+
+/* Input mező stílus */
+#searchBox {
+    flex: 1; /* Nyújtózik a szabad hely kitöltésére */
+    border: none; /* Keret eltávolítása */
+    outline: none; /* Kijelöléskor nincs keret */
+    font-size: 16px; /* Szövegméret */
+    padding: 10px; /* Belső margó */
+    border-radius: 20px; /* Lekerekített sarkok */
+    background-color: #ffffff; /* Fehér háttér */
+    color: #333; /* Szöveg színe */
+}
+
+/* Kereső ikon stílus */
+.search-icon {
+    color: #888; /* Halványabb szín */
+    font-size: 20px; /* Ikon mérete */
+    margin-left: 10px; /* Távolság az input mezőtől */
+    cursor: pointer; /* Mutatóváltás kattinthatóság esetén */
+    transition: color 0.3s ease; /* Animáció színváltozáskor */
+}
+
+.search-icon:hover {
+    color: #555; /* Sötétebb szín hoverkor */
+}
 
     </style>
 </head>
 <body>
-        <div class="header">
-        <nav class="active" id="nav">
-            <ul>
-            
-                <li><a href="index.php" style="color: #FFFFFF; font-weight: bold;"><img src="placeholder.png" style="height: 30px; width: 30px;"> Főoldal</a></li>
-              <li><a href="buy.php" style="color: #FFFFFF; font-weight: bold;"><img src="tickets.png" style="height: 30px; width: 30px;"> Jegyvásárlás</a></li>
-              <li><a href="menetrend.php" style="color: #FFFFFF; font-weight: bold;"><img src="calendar.png" style="height: 30px; width: 30px;"> Menetrend</a></li>
-              <li><a href="info.php" style="color: #FFFFFF; font-weight: bold;"><img src="information-button.png" style="height: 30px; width: 30px;"> Információ</a></li>
-              <li style="padding-left: 50%" class="nav-item"><a href="logout.php" class="nav-link"><i style="color:white" class="fas fa-sign-out-alt"></i><span<style="color:white; font-weight: bold ">Kijelentkezés</sapn></a></li> 
-
-
-            </ul>
-            <button class="icon" id="toggle">
-              <div class="line line1"></div>
-              <div class="line line2"></div>
-            </button>
-          </nav>
-          <div class="navh1">
-                <h1><i class="fas fa-bus"></i> Kaposvár Helyi Járatok</h1>
-                <div class="live-indicator">
-                    <i class="fas fa-circle"></i> Élő követés
+<div class="header">
+    <div class="nav-wrapper">
+        <div class="nav-container">
+            <button class="menu-btn" id="menuBtn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <div style="margin-right: 40%;margin-left: 40%; font-size: 80%" id="time" class="time"></div>
-            </div>
+            </button>
+            <nav class="dropdown-menu" id="dropdownMenu">
+                <ul class="menu-items">
+                    <li>
+                        <a href="index.php" class="active">
+                            <img src="placeholder.png" alt="Főoldal">
+                            <span>Főoldal</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="buy.php">
+                            <img src="tickets.png" alt="Jegyvásárlás">
+                            <span>Jegyvásárlás</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="menetrend.php">
+                            <img src="calendar.png" alt="Menetrend">
+                            <span>Menetrend</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="info.php">
+                            <img src="information-button.png" alt="Információ">
+                            <span>Információ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.php">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Kijelentkezés</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 
-            <div style="margin: 0 auto; align-items: center" class="search-container">
+    <div style="background-color:black; align-items:center">
+        </div>
+                <h1><i class="fas fa-bus"></i> Kaposvár Helyi Járatok</h1>
+         
+                    
+                </div><br>
+               
+                
+            <div class="search-container">
                 <input type="text" id="searchBox" placeholder="Keress járatszám vagy útvonal alapján..." />
                 <i class="fas fa-search search-icon"></i>
             </div>
+            </div>
+
         </div>
-    
+    </div>
     <div id="filterButtons">
         <button class="filter-button active" data-filter="all">
             <i class="fas fa-globe"></i> Összes
@@ -509,6 +638,7 @@ footer {
     </div>
 
     <div id="routeContainer" class="route-container"></div>
+    <div style="margin-right: 40%;margin-left: 45%; color: black; text-align: center; border-radius: 30px; padding 5px; font-size: 30px" id="time" class="time"></div><br>
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -536,10 +666,34 @@ footer {
         </div>
     </footer>
     <script>
-        const toggle = document.getElementById('toggle')
-        const nav = document.getElementById('nav')
+       
+document.getElementById('menuBtn').addEventListener('click', function() {
+    this.classList.toggle('active');
+    document.getElementById('dropdownMenu').classList.toggle('active');
+});
 
-        toggle.addEventListener('click', () => nav.classList.toggle('active'))
+// Kívülre kattintás esetén bezárjuk a menüt
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('dropdownMenu');
+    const menuBtn = document.getElementById('menuBtn');
+    
+    if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+        menu.classList.remove('active');
+        menuBtn.classList.remove('active');
+    }
+});
+
+// Aktív oldal jelölése
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const menuItems = document.querySelectorAll('.menu-items a');
+    
+    menuItems.forEach(item => {
+        if (item.getAttribute('href') === currentPage) {
+            item.classList.add('active');
+        }
+    });
+});
         const busRoutes = [
             {
                 "number": "12",

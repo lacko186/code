@@ -2,7 +2,7 @@
 session_start();
 require_once 'config.php';
 
-// Password reset logic
+/// Password reset logic
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {
     $email = $_POST['resetEmail'];
     
@@ -23,16 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {
                 'email' => $email
             ]);
             
-            // Send reset email
-            $resetLink = "http://yourdomain.com/reset-password.php?token=" . $token;
-            $to = $email;
-            $subject = "Jelszó visszaállítása";
-            $message = "A jelszavad visszaállításához kattints a következő linkre:\n\n" . $resetLink;
-            $headers = "From: noreply@yourdomain.com";
+            // Redirect to reset-password.php with token
+            header("Location: reset-password.php?token=$token");
+            exit;  // Make sure no further code is executed
             
-            mail($to, $subject, $message, $headers);
-            
-            $_SESSION['success'] = "A jelszó visszaállítási link elküldve az email címedre!";
         } else {
             $_SESSION['error'] = "A megadott email cím nem található!";
         }

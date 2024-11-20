@@ -24,10 +24,10 @@ catch(PDOException $e) {
     <style>
 
 :root {
-            --primary-color:linear-gradient(to right, #211717,#b30000);
-            --accent-color: #FB5300;
+    --primary-color:linear-gradient(to right, #211717,#b30000);
+            --accent-color: #FFC107;
             --text-light: #FFFFFF;
-            --shadow: 0 5px 10px rgba(0,0,0,0.8);
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
             --secondary-color: #3498db;
             --hover-color: #2980b9;
             --background-light: #f8f9fa;
@@ -259,7 +259,232 @@ catch(PDOException $e) {
 }
        
     
-      
+     /* Main container styles */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    position: relative;
+}
+
+/* Common card styles */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(179, 0, 0, 0.2);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, #211717, #b30000);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+/* Heading styles */
+.card h2, .card h3 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.card h2::after, .card h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #211717, #b30000);
+    transition: width 0.3s ease;
+}
+
+.card:hover h2::after, .card:hover h3::after {
+    width: 100px;
+}
+
+/* List styles */
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card ul li {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card ul li:last-child {
+    border-bottom: none;
+}
+
+.card ul li:hover {
+    padding-left: 1rem;
+    background: rgba(179, 0, 0, 0.05);
+}
+
+/* Link styles */
+.card a {
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.card a:hover {
+    color: #b30000;
+    background: rgba(179, 0, 0, 0.05);
+    transform: translateX(10px);
+}
+
+/* Icon styles */
+.card i {
+    margin-right: 10px;
+    color: #b30000;
+    transition: transform 0.3s ease;
+}
+
+.card li:hover i {
+    transform: scale(1.2);
+}
+
+/* Values section special styling */
+#about.card ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    text-align: center;
+}
+
+#about.card li {
+    border: none;
+    padding: 2rem;
+    border-radius: 15px;
+    background: rgba(179, 0, 0, 0.03);
+    transition: all 0.3s ease;
+}
+
+#about.card li:hover {
+    background: rgba(179, 0, 0, 0.08);
+    transform: translateY(-5px);
+}
+
+#about.card i {
+    font-size: 2rem;
+    display: block;
+    margin: 0 auto 1rem;
+}
+
+/* Contact section special styling */
+#contacts.card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+}
+
+#contacts.card li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#contacts.card i {
+    background: linear-gradient(to right, #211717, #b30000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0.5rem;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(179, 0, 0, 0.1);
+}
+
+/* Map container styling */
+#map {
+    border-radius: 15px;
+    margin-top: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#map:hover {
+    box-shadow: 0 15px 40px rgba(179, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .card {
+        padding: 1.5rem;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animations to cards */
+.card {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+.card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Loading indicator for elements */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.card.loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}   
       #map{
         margin-top: 5%;  
         }
@@ -308,6 +533,8 @@ catch(PDOException $e) {
 a{
     color: gray;
 }
+
+
     </style>
 </head>
 <body>
@@ -569,10 +796,34 @@ a{
         </div>
     </footer>
     <script>
-const toggle = document.getElementById('toggle')
-        const nav = document.getElementById('nav')
+       
+document.getElementById('menuBtn').addEventListener('click', function() {
+    this.classList.toggle('active');
+    document.getElementById('dropdownMenu').classList.toggle('active');
+});
 
-        toggle.addEventListener('click', () => nav.classList.toggle('active'))
+// Kívülre kattintás esetén bezárjuk a menüt
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('dropdownMenu');
+    const menuBtn = document.getElementById('menuBtn');
+    
+    if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+        menu.classList.remove('active');
+        menuBtn.classList.remove('active');
+    }
+});
+
+// Aktív oldal jelölése
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const menuItems = document.querySelectorAll('.menu-items a');
+    
+    menuItems.forEach(item => {
+        if (item.getAttribute('href') === currentPage) {
+            item.classList.add('active');
+        }
+    });
+});
     </script>
 </body>
 </html>

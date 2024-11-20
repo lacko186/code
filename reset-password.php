@@ -56,23 +56,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_password'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --volan-blue: #004b93;
-            --volan-yellow: #ffd800;
+       :root {
+            --kkzrt-blue: #004b93;
+            --kkzrt-yellow: #ffd800;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('bg.jpg');
+            background: linear-gradient(to TOP, #211717,#b30000, #FFFFFF);
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #000;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
-            padding: 20px;
         }
         
         .reset-container {
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_password'])) {
         }
         
         .btn-reset {
-            background: linear-gradient(45deg, orange, #FF4500);
+            background: linear-gradient(to right, #000000, #FF0000);
             color: white;
             padding: 0.8rem;
             border: none;
@@ -180,13 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_password'])) {
                 <input type="password" class="form-control" id="password" name="password" required 
                        minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
                 <div class="password-requirements">
-                    A jelszónak tartalmaznia kell:
-                    <ul>
-                        <li>Minimum 8 karakter</li>
-                        <li>Legalább egy nagybetű</li>
-                        <li>Legalább egy kisbetű</li>
-                        <li>Legalább egy szám</li>
-                    </ul>
+                    
                 </div>
             </div>
             
@@ -218,13 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_password'])) {
                 event.preventDefault();
                 alert('A két jelszó nem egyezik!');
             }
-            
-            // Jelszó komplexitás ellenőrzése
-            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                event.preventDefault();
-                alert('A jelszó nem felel meg a követelményeknek!');
-            }
+      
         });
     </script>
 </body>
